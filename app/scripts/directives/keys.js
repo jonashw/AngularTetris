@@ -6,7 +6,6 @@ angular.module('angularTetrisApp')
 		template: '<div></div>',
 		restrict: 'E',
 		scope:{
-			newPiece:'=',
 			moveLeft:'=',
 			moveUp:'=',
 			moveDown:'=',
@@ -40,10 +39,6 @@ angular.module('angularTetrisApp')
 					break;
 					case 17://Ctrl
 						scope.rotate();
-						e.preventDefault();
-					break;
-					case 32://Space
-						scope.newPiece();
 						e.preventDefault();
 					break;
 				}

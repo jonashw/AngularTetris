@@ -127,6 +127,12 @@ angular.module('angularTetrisApp')
 		moveDown:  function(piece){ return canMoveDown(piece)  && moveDown(piece);  },
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
 		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
+		Random: function(){
+			var pieces = ['M','L','J','S','Z','I','O'];
+			var randomKey = pieces[Math.floor(pieces.length * Math.random())];
+			console.log('next random piece:',randomKey);
+			return this[randomKey]();
+		},
 		O: createPiece.bind(this,false, [
 			{x:0, y:0},
 			{x:0, y:1},

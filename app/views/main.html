@@ -15,12 +15,28 @@
 			</dl>
 		</div>
 		<keys
-			new-piece="newPiece"
 			move-right="moveRight"
 			move-left="moveLeft"
 			move-up="moveUp"
 			move-down="moveDown"
 			rotate="rotate"></keys>
 	</div>
-	<stage class="pull-right"></stage>
+	<div class="pull-left">
+		<stage></stage>
+		<div class="input-group" style="width:410px;">
+			<div class="form-control">
+				The game is 
+				<span ng-show="isRunning()">running</span>
+				<span ng-show="!isRunning()">paused</span>
+			</div>
+			<span class="input-group-btn">
+				<button ng-click="start()" ng-if="!isRunning()" class="btn btn-success">
+					<i class="glyphicon glyphicon-play"></i>
+				</button>
+				<button ng-click="stop()" ng-if="isRunning()" class="btn btn-default">
+					<i class="glyphicon glyphicon-pause"></i>
+				</button>
+			</span>
+		</div>
+	</div>
 </div>

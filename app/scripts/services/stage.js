@@ -10,7 +10,6 @@ angular.module('angularTetrisApp')
 		blocks: [],
 		absorbPiece: function(piece){
 			var self = this;
-			console.log('absorbing piece: ',piece,this.blocks);
 			var newBlocks = piece.blocks;
 			newBlocks.forEach(function(block){
 				block.x = block.x + piece.x;
