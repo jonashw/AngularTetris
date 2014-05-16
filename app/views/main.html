@@ -1,0 +1,26 @@
+<div style="margin-top:2em;">
+	<div class="pull-left" style="margin-right:5em;">
+		<div class="well">
+			<h1>Angular Tetris</h1>
+			<hr>
+			<p>
+				Honestly, why did I shove Tetris into an angular project?
+			</p>
+			<hr>
+			<dl class="dl-horizontal">
+				<dt>Move Piece</dt>
+				<dd><code>&larr; &darr; &rarr;</code></dd>
+				<dt>Rotate Piece</dt>
+				<dd><code>Ctrl</code></dd>
+			</dl>
+		</div>
+		<keys
+			new-piece="newPiece"
+			move-right="moveRight"
+			move-left="moveLeft"
+			move-up="moveUp"
+			move-down="moveDown"
+			rotate="rotate"></keys>
+	</div>
+	<stage class="pull-right"></stage>
+</div>

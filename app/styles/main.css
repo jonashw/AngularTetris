@@ -1,0 +1,6 @@
+.piece {
+	transition: transform .125s;
+}
+.piece > div {
+	transition: top .125s, left .125s;/*, transform .25s; */
+}
