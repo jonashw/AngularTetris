@@ -9,6 +9,7 @@ angular.module('angularTetrisApp')
 	'$interval',
 	function ($scope,Piece,Render,Stage,$interval) {
 		var piece = {};
+		var shadowPiece = {};
 		var loopInterval = null;
 		$scope.isRunning = function(){
 			return loopInterval !== null;
@@ -36,14 +37,22 @@ angular.module('angularTetrisApp')
 			}
 		};
 		//movement
-		$scope.rotate    = function(){ Piece.rotate(piece);    draw(); };
-		$scope.moveRight = function(){ Piece.moveRight(piece); draw(); };
-		$scope.moveLeft  = function(){ Piece.moveLeft(piece);  draw(); };
-		$scope.moveUp    = function(){ Piece.moveUp(piece);    draw(); };
-		$scope.drop      = function(){ Piece.drop(piece);      draw(); };
-		$scope.moveDown  = function(){
+		$scope.rotate    = moveWithShadow.bind(null,Piece.rotate);
+		$scope.moveRight = moveWithShadow.bind(null,Piece.moveRight);
+		$scope.moveLeft  = moveWithShadow.bind(null,Piece.moveLeft);
+		function moveWithShadow(fn){
+			fn(piece);
+			Piece.castShadow(fn, piece, shadowPiece);
+			draw();
+		}
+		$scope.drop = function(){
+			Piece.drop(piece);
+			draw();
+		};
+		$scope.moveDown = function(){
 			if(!Piece.moveDown(piece)){//the piece has come to rest
 				Stage.absorbPiece(piece);
+				shadowPiece.element.remove();
 				newPiece();
 			}
 			draw();
@@ -56,25 +65,15 @@ angular.module('angularTetrisApp')
 			piece = Piece.Random();
 			Stage.element.append(piece.element);
 			piece.x = 10;
+			shadowPiece = Piece.Shadow(piece);
+			Stage.element.append(shadowPiece.element);
 			draw();
 		}
 
-		var newShadowPiece = (function(){
-			var _shadowPiece = {};
-			return function(){
-				if('element' in _shadowPiece){
-					_shadowPiece.element.remove();
-				}
-				_shadowPiece = Piece.Shadow(piece);
-				Stage.element.append(_shadowPiece.element);
-				return _shadowPiece;
-			}
-		})();
-
 		function draw(){
-			Render.piece(piece);
 			Stage.blocks.forEach(Render.block);
-			Render.piece(newShadowPiece());
+			Render.piece(piece);
+			Render.piece(shadowPiece);
 		}
 	}
 ]);

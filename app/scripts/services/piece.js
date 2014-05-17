@@ -3,18 +3,22 @@
 angular.module('angularTetrisApp')
 .service('Piece', ['Stage',function (Stage) {
 	var blockSize = Stage.blockSize + 'px';
-	var canRotate    = shadowWithinStage.bind(null, rotate);
-	var canMoveDown  = shadowWithinStage.bind(null, moveDown);
-	var canMoveRight = shadowWithinStage.bind(null, moveRight);
-	var canMoveLeft  = shadowWithinStage.bind(null, moveLeft);
+	var canRotate    = shadowInLegalPosition.bind(null, rotate);
+	var canMoveDown  = shadowInLegalPosition.bind(null, moveDown);
+	var canMoveRight = shadowInLegalPosition.bind(null, moveRight);
+	var canMoveLeft  = shadowInLegalPosition.bind(null, moveLeft);
 	function canMoveUp   (piece){ return false; }
 
-	function shadowWithinStage(fn, piece){
+	function shadowInLegalPosition(fn, piece){
 		var shadowPiece = clonePiece(piece);
 		fn(shadowPiece);
-		return shadowPiece.blocks.every(function(block){
-			return !blockOverlapsWithStageBlocks(shadowPiece, block)
-				&& blockWithinStage(shadowPiece, block);
+		return inLegalPosition(shadowPiece);
+	}
+
+	function inLegalPosition(piece){
+		return piece.blocks.every(function(block){
+			return !blockOverlapsWithStageBlocks(piece, block)
+				&& blockWithinStage(piece, block);
 		});
 	}
 
@@ -158,6 +162,11 @@ angular.module('angularTetrisApp')
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
 		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
 		drop: function(piece){ drop(piece); return true; },
+		castShadow: function(fn, piece, shadowPiece){
+			shadowPiece.y = piece.y;
+		   	fn(shadowPiece);
+			drop(shadowPiece);
+		},
 		Random: function(){
 			var pieces = ['M','L','J','S','Z','I','O'];
 			var randomKey = pieces[Math.floor(pieces.length * Math.random())];

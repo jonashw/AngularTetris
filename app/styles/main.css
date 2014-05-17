@@ -1,3 +1,10 @@
+.stage {
+	background:#666;
+	display:inline-block;
+	position:relative;
+	border:5px solid #333;
+	overflow:hidden;
+}
 .piece {
 	transition: transform .125s;
 	display:inline-block;
@@ -9,7 +16,9 @@
 }
 .block {
 	position:absolute;
-}
-.piece > div {
+	z-index:3;
 	transition: top .125s, left .125s;/*, transform .25s; */
+}
+.shadow-piece > .block {
+	z-index:2;
 }

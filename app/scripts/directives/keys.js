@@ -7,7 +7,6 @@ angular.module('angularTetrisApp')
 		restrict: 'E',
 		scope:{
 			moveLeft:'=',
-			moveUp:'=',
 			moveDown:'=',
 			rotate:'=',
 			moveRight:'=',
@@ -23,7 +22,6 @@ angular.module('angularTetrisApp')
 			var mappings = {
 				'39':'moveRight',//right
 				'37':'moveLeft',//left
-				'38':'moveUp',//up
 				'40':'moveDown',//down
 				'17':'rotate',//Ctrl
 				'80':'playPause',//p

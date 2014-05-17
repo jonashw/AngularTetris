@@ -44,14 +44,11 @@ angular.module('angularTetrisApp')
 		}
 	};
 	_stage.element = angular.element('<div></div>')
-	.css({
-		'background':'#666',
-		'display':'inline-block',
-		'position':'relative',
-		'border':'5px solid #333',
-		'width':(_stage.blockSize * _stage.blocksWide) + 'px',
-		'height':(_stage.blockSize * _stage.blocksTall) + 'px'
-	});
+		.addClass('stage')
+		.css({
+			'width':(_stage.blockSize * _stage.blocksWide) + 'px',
+			'height':(_stage.blockSize * _stage.blocksTall) + 'px'
+		});
 	_blockRows = (function(){
 		var _rows = [];
 		for(var y=0; y < _stage.blocksTall; y++){
