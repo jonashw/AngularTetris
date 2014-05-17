@@ -1,5 +1,10 @@
 .piece {
 	transition: transform .125s;
+	display:inline-block;
+	position:absolute;
+}
+.block {
+	position:absolute;
 }
 .piece > div {
 	transition: top .125s, left .125s;/*, transform .25s; */

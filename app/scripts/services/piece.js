@@ -2,6 +2,7 @@
 
 angular.module('angularTetrisApp')
 .service('Piece', ['Stage',function (Stage) {
+	var blockSize = Stage.blockSize + 'px';
 	var canRotate    = shadowWithinStage.bind(null, rotate);
 	var canMoveDown  = shadowWithinStage.bind(null, moveDown);
 	var canMoveRight = shadowWithinStage.bind(null, moveRight);
@@ -89,20 +90,33 @@ angular.module('angularTetrisApp')
 	function moveDown (piece){ piece.y++; return true; }
 
 	function createPiece(zeroCenter,blocks){
-		var copiedBlocks = blocks.map(cloneBlock);
-		copiedBlocks.forEach(function(block){
-			block.rotation = 0;
-			block.color = 'pink';
-		});
-		return {
+		var element = angular.element('<div></div>');
+		element.addClass('piece');
+		var piece = {
+			element: element,
 			zeroCenter: zeroCenter,
-			blocks: copiedBlocks,
 			x:0,
 			y:0
 		};
+		var copiedBlocks = blocks.map(cloneBlock);
+		copiedBlocks.forEach(function(block){
+			block.rotation = 0;
+			block.element = angular.element('<div></div>');
+			block.element.addClass('block');
+			block.element.css({
+				'background':'pink',
+				'width':blockSize,
+				'height':blockSize
+			});
+			piece.element.append(block.element);
+		});
+		Stage.element.append(piece.element);
+		piece.blocks = copiedBlocks;
+		return piece;
 	}
 
 	function clonePiece(piece){
+		//a piece's element doesn't matter here
 		return {
 			rotation: piece.rotation,
 			zeroCenter: piece.zeroCenter,
@@ -113,11 +127,12 @@ angular.module('angularTetrisApp')
 	}
 
 	function cloneBlock(block){
-		var clone = {};
-		for(var k in block){
-			clone[k] = block[k];
-		}
-		return clone;
+		//a block's element doesn't matter here
+		return {
+			rotation: block.rotation,
+			x: block.x,
+			y: block.y
+		};
 	}
 
 	//API
