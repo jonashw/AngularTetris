@@ -2,6 +2,10 @@
 	transition: transform .125s;
 	display:inline-block;
 	position:absolute;
+	z-index:3;
+}
+.shadow-piece {
+	z-index:2;
 }
 .block {
 	position:absolute;

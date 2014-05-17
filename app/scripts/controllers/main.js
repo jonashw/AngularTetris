@@ -8,7 +8,7 @@ angular.module('angularTetrisApp')
 	'Stage',
 	'$interval',
 	function ($scope,Piece,Render,Stage,$interval) {
-		$scope.piece = {};
+		var piece = {};
 		var loopInterval = null;
 		$scope.isRunning = function(){
 			return loopInterval !== null;
@@ -17,7 +17,7 @@ angular.module('angularTetrisApp')
 		$scope.start = function(){
 			if(!initialized){
 				newPiece();
-				render();
+				draw();
 				initialized = true;
 			}
 			loopInterval = $interval(function(){
@@ -36,31 +36,45 @@ angular.module('angularTetrisApp')
 			}
 		};
 		//movement
-		$scope.rotate    = function(){ Piece.rotate($scope.piece);    render(); };
-		$scope.moveRight = function(){ Piece.moveRight($scope.piece); render(); };
-		$scope.moveLeft  = function(){ Piece.moveLeft($scope.piece);  render(); };
-		$scope.moveUp    = function(){ Piece.moveUp($scope.piece);    render(); };
-		$scope.drop      = function(){ Piece.drop($scope.piece);      render(); };
+		$scope.rotate    = function(){ Piece.rotate(piece);    draw(); };
+		$scope.moveRight = function(){ Piece.moveRight(piece); draw(); };
+		$scope.moveLeft  = function(){ Piece.moveLeft(piece);  draw(); };
+		$scope.moveUp    = function(){ Piece.moveUp(piece);    draw(); };
+		$scope.drop      = function(){ Piece.drop(piece);      draw(); };
 		$scope.moveDown  = function(){
-			if(!Piece.moveDown($scope.piece)){//the piece has come to rest
-				Stage.absorbPiece($scope.piece);
+			if(!Piece.moveDown(piece)){//the piece has come to rest
+				Stage.absorbPiece(piece);
 				newPiece();
 			}
-			render();
+			draw();
 		};
 		//
 		function newPiece(){
-			if('element' in $scope.piece){
-				$scope.piece.element.detach();
+			if('element' in piece){
+				piece.element.detach();
 			}
-			$scope.piece = Piece.Random();
-			$scope.piece.x = 10;
-			render();
+			piece = Piece.Random();
+			Stage.element.append(piece.element);
+			piece.x = 10;
+			draw();
 		}
 
-		function render(){
-			Render.piece($scope.piece);
+		var newShadowPiece = (function(){
+			var _shadowPiece = {};
+			return function(){
+				if('element' in _shadowPiece){
+					_shadowPiece.element.remove();
+				}
+				_shadowPiece = Piece.Shadow(piece);
+				Stage.element.append(_shadowPiece.element);
+				return _shadowPiece;
+			}
+		})();
+
+		function draw(){
+			Render.piece(piece);
 			Stage.blocks.forEach(Render.block);
+			Render.piece(newShadowPiece());
 		}
 	}
 ]);

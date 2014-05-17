@@ -110,9 +110,19 @@ angular.module('angularTetrisApp')
 			});
 			piece.element.append(block.element);
 		});
-		Stage.element.append(piece.element);
 		piece.blocks = copiedBlocks;
 		return piece;
+	}
+
+	function createShadowPiece(piece){
+		var shadowPiece = createPiece(piece.zeroCenter, piece.blocks);
+		shadowPiece.element.addClass('shadow-piece');
+		shadowPiece.x = piece.x;
+		drop(shadowPiece);
+		shadowPiece.blocks.forEach(function(block){
+			block.element.css('background','#333');
+		});
+		return shadowPiece;
 	}
 
 	function clonePiece(piece){
@@ -124,6 +134,11 @@ angular.module('angularTetrisApp')
 			x: piece.x,
 			y: piece.y
 		};
+	}
+	function drop(piece){
+		while(canMoveDown(piece)){
+			moveDown(piece);
+		}
 	}
 
 	function cloneBlock(block){
@@ -142,14 +157,15 @@ angular.module('angularTetrisApp')
 		moveDown:  function(piece){ return canMoveDown(piece)  && moveDown(piece);  },
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
 		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
-		drop: function(piece){
-			while(this.moveDown(piece)){}
-		},
+		drop: function(piece){ drop(piece); return true; },
 		Random: function(){
 			var pieces = ['M','L','J','S','Z','I','O'];
 			var randomKey = pieces[Math.floor(pieces.length * Math.random())];
 			console.log('next random piece:',randomKey);
 			return this[randomKey]();
+		},
+		Shadow: function(piece){
+			return createShadowPiece(piece);
 		},
 		O: createPiece.bind(this,false, [
 			{x:0, y:0},
