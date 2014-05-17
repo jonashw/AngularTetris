@@ -17,7 +17,12 @@
 .block {
 	position:absolute;
 	z-index:3;
-	transition: top .125s, left .125s;/*, transform .25s; */
+}
+.piece > .block {
+	/* 	important:
+	 		we only want to animate blocks when they are part of a piece
+	 */
+	transition: top .125s, left .125s;
 }
 .shadow-piece > .block {
 	z-index:2;

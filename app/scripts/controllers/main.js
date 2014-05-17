@@ -55,6 +55,7 @@ angular.module('angularTetrisApp')
 				shadowPiece.element.remove();
 				newPiece();
 			}
+			Piece.castShadow(Piece.moveDown, piece, shadowPiece);
 			draw();
 		};
 		//
@@ -71,9 +72,13 @@ angular.module('angularTetrisApp')
 		}
 
 		function draw(){
-			Stage.blocks.forEach(Render.block);
+			Render.blocks(Stage.blocks);
 			Render.piece(piece);
 			Render.piece(shadowPiece);
 		}
+		Stage.onRowRemove(function(){
+			Piece.castShadow(Piece.no_op, piece, shadowPiece);
+			draw();
+		});
 	}
 ]);

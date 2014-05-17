@@ -3,10 +3,16 @@
 angular.module('angularTetrisApp')
 .service('Stage', function Stage() {
 	var _blockRows;
-	var _observers = [];
+	var _blockObservers = [];
+	var _rowObservers = [];
 	function notifyOfRemovedBlock(block,doneFn){
-		_observers.forEach(function(fn){
+		_blockObservers.forEach(function(fn){
 			fn(block,doneFn);
+		});
+	}
+	function notifyOfRemovedRow(){
+		_rowObservers.forEach(function(fn){
+			fn();
 		});
 	}
 	var _stage = {
@@ -25,7 +31,10 @@ angular.module('angularTetrisApp')
 			return nonEmptyRows.length;
 		},
 		onBlockRemove: function(fn){
-			_observers.push(fn);
+			_blockObservers.push(fn);
+		},
+		onRowRemove: function(fn){
+			_rowObservers.push(fn);
 		},
 		blockSize: 20,
 		blocksWide: 20.5,
@@ -88,6 +97,7 @@ angular.module('angularTetrisApp')
 		rowIndicesCleared.forEach(function(clearedRowIndex){
 			clearRow(clearedRowIndex, function(){
 				moveRowsDown(clearedRowIndex);
+				notifyOfRemovedRow();
 			});
 		});
 	}

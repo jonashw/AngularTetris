@@ -2,23 +2,32 @@
 
 angular.module('angularTetrisApp')
 .service('Render', ['Stage',function(Stage) {
+	var self;
 	Stage.onBlockRemove(function(block,done){
 		block.element.fadeOut(200,done);
 	});
-	return {
+	Stage.onRowRemove(function(){
+		self.blocks(Stage.blocks);
+	});
+	function renderBlock(block){
+		block.element.css({
+			'-webkit-transform':'rotate(-' + block.rotation + 'deg)',
+			'left':(Stage.blockSize * (block.x + 0)) + 'px',
+			'top':(Stage.blockSize * (block.y + 0)) + 'px'
+		});
+	}
+	var render = {
 		piece: function(piece){
 			piece.element.css({
 				'left':(Stage.blockSize * piece.x) + 'px',
 				'top':(Stage.blockSize * piece.y) + 'px'
 			});
-			piece.blocks.forEach(this.block);
+			self.blocks(piece.blocks);
 		},
-		block: function(block){
-			block.element.css({
-				'-webkit-transform':'rotate(-' + block.rotation + 'deg)',
-				'left':(Stage.blockSize * (block.x + 0)) + 'px',
-				'top':(Stage.blockSize * (block.y + 0)) + 'px'
-			});
+		blocks: function(blocks){
+			blocks.forEach(renderBlock);
 		}
-	}
+	};
+	self = render;
+	return render;
 }]);

@@ -161,7 +161,8 @@ angular.module('angularTetrisApp')
 		moveDown:  function(piece){ return canMoveDown(piece)  && moveDown(piece);  },
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
 		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
-		drop: function(piece){ drop(piece); return true; },
+		drop:      function(piece){ drop(piece); return true; },
+		no_op:     function(piece){ },
 		castShadow: function(fn, piece, shadowPiece){
 			shadowPiece.y = piece.y;
 		   	fn(shadowPiece);
