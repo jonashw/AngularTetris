@@ -10,7 +10,9 @@ angular.module('angularTetrisApp')
 			moveUp:'=',
 			moveDown:'=',
 			rotate:'=',
-			moveRight:'='
+			moveRight:'=',
+			drop:'=',
+			playPause:'='
 		},
 		link: function (scope, element, attrs) {
 			element.css('display','block');
@@ -18,29 +20,20 @@ angular.module('angularTetrisApp')
 				element.text('last pressed keycode: ' + keycode);
 			}
 			update('');
+			var mappings = {
+				'39':'moveRight',//right
+				'37':'moveLeft',//left
+				'38':'moveUp',//up
+				'40':'moveDown',//down
+				'17':'rotate',//Ctrl
+				'80':'playPause',//p
+				'32':'drop'//space
+			};
 			$document.bind('keydown',function(e){
 				update(e.which);
-				switch(e.which){
-					case 39://right
-						scope.moveRight();
-						e.preventDefault();
-					break;
-					case 37://left
-						scope.moveLeft();
-						e.preventDefault();
-					break;
-					case 38://up
-						scope.moveUp();
-						e.preventDefault();
-					break;
-					case 40://down
-						scope.moveDown();
-						e.preventDefault();
-					break;
-					case 17://Ctrl
-						scope.rotate();
-						e.preventDefault();
-					break;
+				if(e.which in mappings){
+					scope[mappings[e.which]]();
+					e.preventDefault();
 				}
 			});
 		}

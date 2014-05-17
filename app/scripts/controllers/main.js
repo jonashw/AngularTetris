@@ -28,11 +28,19 @@ angular.module('angularTetrisApp')
 			$interval.cancel(loopInterval);
 			loopInterval = null;
 		};
+		$scope.playPause = function(){
+			if($scope.isRunning()){
+				$scope.stop();
+			} else {
+				$scope.start();
+			}
+		};
 		//movement
 		$scope.rotate    = function(){ Piece.rotate($scope.piece);    render(); };
 		$scope.moveRight = function(){ Piece.moveRight($scope.piece); render(); };
 		$scope.moveLeft  = function(){ Piece.moveLeft($scope.piece);  render(); };
 		$scope.moveUp    = function(){ Piece.moveUp($scope.piece);    render(); };
+		$scope.drop      = function(){ Piece.drop($scope.piece);      render(); };
 		$scope.moveDown  = function(){
 			if(!Piece.moveDown($scope.piece)){//the piece has come to rest
 				Stage.absorbPiece($scope.piece);

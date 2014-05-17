@@ -142,6 +142,9 @@ angular.module('angularTetrisApp')
 		moveDown:  function(piece){ return canMoveDown(piece)  && moveDown(piece);  },
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
 		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
+		drop: function(piece){
+			while(this.moveDown(piece)){}
+		},
 		Random: function(){
 			var pieces = ['M','L','J','S','Z','I','O'];
 			var randomKey = pieces[Math.floor(pieces.length * Math.random())];
