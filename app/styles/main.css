@@ -1,5 +1,5 @@
 .stage {
-	background:#666;
+	background:#333;
 	display:inline-block;
 	position:relative;
 	border:5px solid #333;
@@ -17,6 +17,14 @@
 .block {
 	position:absolute;
 	z-index:3;
+	box-shadow:inset 0 0 10px rgba(0,0,0,0.125);
+	border:1px solid rgba(255,255,255,0.05);
+	/*
+	box-shadow:  2px  2px white,
+ 	            -2px  2px white,
+ 	             2px -2px white,
+ 	            -2px -2px white;
+	*/
 }
 .piece > .block {
 	/* 	important:
@@ -26,4 +34,13 @@
 }
 .shadow-piece > .block {
 	z-index:2;
+	background-color:#666;
 }
+
+.block-red { background:#F83A5A; }
+.block-orange { background:#FE9800; }
+.block-yellow { background:#FFFE33; }
+.block-green { background:#62CD6B; }
+.block-teal { background:#659BC7; }
+.block-blue { background:#3464CB; }
+.block-purple { background:#9935CA; }

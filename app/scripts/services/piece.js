@@ -93,6 +93,14 @@ angular.module('angularTetrisApp')
 	function moveUp   (piece){ piece.y--; return true; }
 	function moveDown (piece){ piece.y++; return true; }
 
+	var colors = ['red','orange','yellow','green','teal','blue','purple'];
+	function randomColor(){
+		var index = Math.floor(Math.random() * colors.length);
+		var color = colors[index];
+		console.log('random color:',color);
+		return color;
+	}
+
 	function createPiece(zeroCenter,blocks){
 		var element = angular.element('<div></div>');
 		element.addClass('piece');
@@ -103,12 +111,13 @@ angular.module('angularTetrisApp')
 			y:0
 		};
 		var copiedBlocks = blocks.map(cloneBlock);
+		var color = randomColor();
 		copiedBlocks.forEach(function(block){
 			block.rotation = 0;
+			block.color = color;
 			block.element = angular.element('<div></div>');
 			block.element.addClass('block');
 			block.element.css({
-				'background':'pink',
 				'width':blockSize,
 				'height':blockSize
 			});
@@ -122,10 +131,10 @@ angular.module('angularTetrisApp')
 		var shadowPiece = createPiece(piece.zeroCenter, piece.blocks);
 		shadowPiece.element.addClass('shadow-piece');
 		shadowPiece.x = piece.x;
-		drop(shadowPiece);
-		shadowPiece.blocks.forEach(function(block){
-			block.element.css('background','#333');
+		shadowPiece.blocks.forEach(function(block,i){
+			block.color = piece.blocks[i].color;
 		});
+		drop(shadowPiece);
 		return shadowPiece;
 	}
 
@@ -150,7 +159,8 @@ angular.module('angularTetrisApp')
 		return {
 			rotation: block.rotation,
 			x: block.x,
-			y: block.y
+			y: block.y,
+			color: block.color
 		};
 	}
 

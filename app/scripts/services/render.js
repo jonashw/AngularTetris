@@ -15,6 +15,7 @@ angular.module('angularTetrisApp')
 			'left':(Stage.blockSize * (block.x + 0)) + 'px',
 			'top':(Stage.blockSize * (block.y + 0)) + 'px'
 		});
+		block.element.addClass('block-' + block.color);
 	}
 	var render = {
 		piece: function(piece){
