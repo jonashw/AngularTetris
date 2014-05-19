@@ -13,7 +13,7 @@ angular.module('angularTetrisApp')
 			Piece.S(),
 			Piece.Z(),
 			Piece.I(),
-			Piece.M()
+			Piece.T()
 		];
 	}
 ]);

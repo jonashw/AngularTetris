@@ -179,7 +179,7 @@ angular.module('angularTetrisApp')
 			drop(shadowPiece);
 		},
 		Random: function(){
-			var pieces = ['M','L','J','S','Z','I','O'];
+			var pieces = ['T','L','J','S','Z','I','O'];
 			var randomKey = pieces[Math.floor(pieces.length * Math.random())];
 			console.log('next random piece:',randomKey);
 			return this[randomKey]();
@@ -217,7 +217,7 @@ angular.module('angularTetrisApp')
 			{x: 0, y:-1},
 			{x:-1, y:-1}
 		]),
-		M: createPiece.bind(this, true, [
+		T: createPiece.bind(this, true, [
 			{x:-1, y: 0},
 			{x: 0, y: 0},
 			{x: 0, y: 1},
