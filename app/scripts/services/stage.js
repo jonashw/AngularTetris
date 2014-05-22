@@ -3,21 +3,9 @@
 angular.module('angularTetrisApp')
 .service('Stage', function Stage() {
 	var _blockRows;
-	var _blockObservers = [];
-	var _rowObservers = [];
 	var _blockSize = 20;
 	var _blocksWide = 20.5;
 	var _blocksTall = 20.5;
-	function notifyOfRemovedBlock(block,doneFn){
-		_blockObservers.forEach(function(fn){
-			fn(block,doneFn);
-		});
-	}
-	function notifyOfRemovedRow(){
-		_rowObservers.forEach(function(fn){
-			fn();
-		});
-	}
 	var _stage = {
 		element: angular.element('<div></div>')
 			.addClass('stage')
@@ -38,13 +26,10 @@ angular.module('angularTetrisApp')
 			});
 			return nonEmptyRows.length;
 		},
-		onBlockRemove: function(fn){
-			_blockObservers.push(fn);
-		},
-		onRowRemove: function(fn){
-			_rowObservers.push(fn);
-		},
-		blockSize: _blockSize,
+		onRowsCompleted: function(fn){ _observers.add.rowsCompleted(fn); },
+		onRowRemove:     function(fn){ _observers.add.rowRemoved(fn); },
+		onBlockRemove:   function(fn){ _observers.add.blockRemoved(fn); },
+		blockSize:  _blockSize,
 		blocksWide: _blocksWide,
 		blocksTall: _blocksTall,
 		blocks: [],
@@ -60,6 +45,7 @@ angular.module('angularTetrisApp')
 			clearRows();
 		}
 	};
+
 	_blockRows = (function(){
 		var _rows = [];
 		for(var y=0; y < _stage.blocksTall; y++){
@@ -71,6 +57,7 @@ angular.module('angularTetrisApp')
 		}
 		return _rows;
 	})();
+
 	function addBlock(block){
 		_blockRows[block.y][block.x] = block;
 		_stage.blocks.push(block);
@@ -96,10 +83,11 @@ angular.module('angularTetrisApp')
 				rowIndicesCleared.push(y);
 			}
 		});
+		_observers.notify.rowsCompleted(rowIndicesCleared.length);
 		rowIndicesCleared.forEach(function(clearedRowIndex){
 			clearRow(clearedRowIndex, function(){
 				moveRowsDown(clearedRowIndex);
-				notifyOfRemovedRow();
+				_observers.notify.rowRemoved();
 			});
 		});
 	}
@@ -114,7 +102,7 @@ angular.module('angularTetrisApp')
 			}
 		};
 		blocks.forEach(function(block){
-			notifyOfRemovedBlock(block,function(){
+			_observers.notify.blockRemoved(block,function(){
 				var index = _stage.blocks.indexOf(block);
 				_stage.blocks.splice(index,1);
 				_blockRows[block.y][block.x] = null;
@@ -135,5 +123,38 @@ angular.module('angularTetrisApp')
 			}
 		}
 	}
+	var _observers = (function(){
+		var __observers = {
+			rowRemoved: [],
+			blockRemoved: [],
+			rowsCompleted: []
+		};
+		function __add(event,fn){
+			__observers[event].push(fn);
+		}
+		function __notify(event,args){
+			__observers[event].forEach(function(fn){
+				fn.apply(null, args || []);
+			});
+		}
+		return {
+			add: {
+				rowsCompleted: __add.bind(null,'rowsCompleted'),
+				rowRemoved:    __add.bind(null,'rowRemoved'),
+				blockRemoved:  __add.bind(null,'blockRemoved')
+			},
+			notify: {
+				blockRemoved: function(block,doneFn){
+					__notify('blockRemoved',[block,doneFn]);
+				},
+				rowRemoved: function(){
+					__notify('rowRemoved');
+				},
+				rowsCompleted: function(n){
+					__notify('rowsCompleted',[n]);
+				}
+			}
+		};
+	})();
 	return _stage;
 });

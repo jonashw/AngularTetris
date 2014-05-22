@@ -8,6 +8,13 @@ angular.module('angularTetrisApp')
 	'Stage',
 	'$interval',
 	function ($scope,Piece,Render,Stage,$interval) {
+		$scope.scoring = {
+			rowsCleared:0
+		};
+		Stage.onRowsCompleted(function(n){
+			$scope.scoring.rowsCleared += n;
+			//$scope.digest();
+		});
 		var piece = {};
 		var shadowPiece = {};
 		var loopInterval = null;
