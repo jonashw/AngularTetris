@@ -37,7 +37,8 @@ angular.module('angularTetrisApp')
 			}
 		};
 		//movement
-		$scope.rotate    = moveWithShadow.bind(null,Piece.rotate);
+		$scope.rotateCW  = moveWithShadow.bind(null,Piece.rotateCW);
+		$scope.rotateCCW = moveWithShadow.bind(null,Piece.rotateCCW);
 		$scope.moveRight = moveWithShadow.bind(null,Piece.moveRight);
 		$scope.moveLeft  = moveWithShadow.bind(null,Piece.moveLeft);
 		function moveWithShadow(fn){

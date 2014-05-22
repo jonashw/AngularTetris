@@ -3,7 +3,8 @@
 angular.module('angularTetrisApp')
 .service('Piece', ['Stage',function (Stage) {
 	var blockSize = Stage.blockSize + 'px';
-	var canRotate    = shadowInLegalPosition.bind(null, rotate);
+	var canRotateCW    = shadowInLegalPosition.bind(null, rotateCW);
+	var canRotateCCW    = shadowInLegalPosition.bind(null, rotateCCW);
 	var canMoveDown  = shadowInLegalPosition.bind(null, moveDown);
 	var canMoveRight = shadowInLegalPosition.bind(null, moveRight);
 	var canMoveLeft  = shadowInLegalPosition.bind(null, moveLeft);
@@ -35,9 +36,17 @@ angular.module('angularTetrisApp')
 		});
 	}
 
-	function rotate(piece){
+	function rotateCCW(piece){
 		if(piece.zeroCenter){
-			piece.blocks.forEach(rotateBlock);
+			piece.blocks.forEach(rotateBlock.CCW);
+		} else {
+			weirdRotate(piece);
+		}
+		return true;
+	}
+	function rotateCW(piece){
+		if(piece.zeroCenter){
+			piece.blocks.forEach(rotateBlock.CW);
 		} else {
 			weirdRotate(piece);
 		}
@@ -46,23 +55,57 @@ angular.module('angularTetrisApp')
 
 	var rotateBlock = (function(){
 		//my god, boy.  Use some trig!
-		var _rotationTruthTable = {
-			'-1,-1': {x:-1, y: 1},
-			'-1,0' : {x: 0, y: 1},
-			'-1,1' : {x: 1, y: 1}, 
-			'0,-1' : {x:-1, y: 0},
-			'0,0'  : {x: 0, y: 0},
-			'0,1'  : {x: 1, y: 0},
-			'1,-1' : {x:-1, y:-1},
-			'1,0'  : {x: 0, y:-1},
-			'1,1'  : {x: 1, y:-1},
-			'-2,0' : {x: 0, y:2},
-			'0,2'  : {x: 2, y:0},
-			'2,0'  : {x: 0, y:-2},
-			'0,-2' : {x: -2, y:0}
+		var _positionConnections = [
+			[{x:-1, y:-1}, {x:-1, y: 1}],
+			[{x:-1, y: 0}, {x: 0, y: 1}],
+			[{x:-1, y: 1}, {x: 1, y: 1}], 
+			[{x: 0, y:-1}, {x:-1, y: 0}],
+			[{x: 0, y: 0}, {x: 0, y: 0}],
+			[{x: 0, y: 1}, {x: 1, y: 0}],
+			[{x: 1, y:-1}, {x:-1, y:-1}],
+			[{x: 1, y: 0}, {x: 0, y:-1}],
+			[{x: 1, y: 1}, {x: 1, y:-1}],
+			[{x:-2, y: 0}, {x: 0, y: 2}],
+			[{x: 0, y: 2}, {x: 2, y: 0}],
+			[{x: 2, y: 0}, {x: 0, y:-2}],
+			[{x: 0, y:-2}, {x:-2, y: 0}]
+		];
+		var _truthTable = {
+			CW:{},
+			CCW:{}
+		};
+		_positionConnections.forEach(function(connection){
+			var from = connection[0];
+			var to = connection[1];
+			var fromKey = from.x + ',' + from.y;
+			var toKey = to.x + ',' + to.y;
+			_truthTable.CW[fromKey] = to;
+			_truthTable.CCW[toKey] = from;
+		});
+		function _rotate(truthTable,block){
+			var newPosition = truthTable[block.x + ',' + block.y];
+			block.x = newPosition.x;
+			block.y = newPosition.y;
+			return true;
+		}
+		return {
+			CW: function(block){
+				block.rotation += 90;
+				if(block.rotation >= 360){
+					block.rotation -= 360;
+				}
+				return _rotate(_truthTable.CW,block);
+			},
+			CCW: function(block){
+				block.rotation -= 90;
+				if(block.rotation <= -360){
+					block.rotation += 360;
+				}
+				return _rotate(_truthTable.CCW,block);
+			}
 		};
 		return function(block){
-			var newPosition = _rotationTruthTable[block.x + ',' + block.y];
+			var newPosition = _rotationCWTruthTable[block.x + ',' + block.y];
 			block.x = newPosition.x;
 			block.y = newPosition.y;
 			block.rotation += 90;
@@ -170,7 +213,9 @@ angular.module('angularTetrisApp')
 		moveRight: function(piece){ return canMoveRight(piece) && moveRight(piece); },
 		moveDown:  function(piece){ return canMoveDown(piece)  && moveDown(piece);  },
 		moveUp:    function(piece){ return canMoveUp(piece)    && moveUp(piece);    },
-		rotate:    function(piece){ return canRotate(piece)    && rotate(piece);    },
+		rotate:    function(piece){ return canRotateCW(piece)  && rotateCW(piece);  },
+		rotateCW:  function(piece){ return canRotateCW(piece)  && rotateCW(piece);  },
+		rotateCCW: function(piece){ return canRotateCCW(piece) && rotateCCW(piece); },
 		drop:      function(piece){ drop(piece); return true; },
 		no_op:     function(piece){ },
 		castShadow: function(fn, piece, shadowPiece){
@@ -187,6 +232,8 @@ angular.module('angularTetrisApp')
 		Shadow: function(piece){
 			return createShadowPiece(piece);
 		},
+		justRotateCW: rotateCW.bind(null),
+		justRotateCCW: rotateCCW.bind(null),
 		O: createPiece.bind(this,false, [
 			{x:0, y:0},
 			{x:0, y:1},

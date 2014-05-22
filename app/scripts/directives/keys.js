@@ -8,7 +8,8 @@ angular.module('angularTetrisApp')
 		scope:{
 			moveLeft:'=',
 			moveDown:'=',
-			rotate:'=',
+			rotateCw:'=',
+			rotateCcw:'=',
 			moveRight:'=',
 			drop:'=',
 			playPause:'='
@@ -23,7 +24,8 @@ angular.module('angularTetrisApp')
 				'39':'moveRight',//right
 				'37':'moveLeft',//left
 				'40':'moveDown',//down
-				'17':'rotate',//Ctrl
+				'17':'rotateCw',//Ctrl
+				'96':'rotateCcw',//0 (on Num Pad)
 				'80':'playPause',//p
 				'32':'drop'//space
 			};

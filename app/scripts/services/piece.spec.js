@@ -25,7 +25,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after rotation', function () {
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[-1, 1],
 				[ 0, 1],
@@ -34,7 +34,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after CCW rotation', function () {
-			Piece.rotateCCW(p);
+			Piece.justRotateCCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 1,-1],
 				[ 0,-1],
@@ -43,8 +43,8 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after two rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 1, 1],
 				[ 1, 0],
@@ -53,9 +53,9 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after three rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 1,-1],
 				[ 0,-1],
@@ -79,7 +79,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after rotation', function () {
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[0,1],
 				[1,1],
@@ -88,8 +88,8 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after two rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[1,1],
 				[1,0],
@@ -98,9 +98,9 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a different orientation after three rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[1,0],
 				[0,0],
@@ -109,10 +109,10 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has has the same orientation after four rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[0,0],
 				[0,1],
@@ -135,7 +135,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a particular orientation after one rotation', function () {
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 1, 0],
 				[ 0, 0],
@@ -147,7 +147,7 @@ describe('Service: Piece', function () {
 	describe('M piece',function(){
 		var p;
 		beforeEach(function(){
-			p = Piece.M();
+			p = Piece.T();
 		});
 		it('has a particular orientation', function () {
 			expectPieceCoordsToBe(p,[
@@ -158,7 +158,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a particular orientation after rotation', function () {
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 0, 1],
 				[ 0, 0],
@@ -181,7 +181,7 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a particular orientation after rotation', function () {
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 0, 2],
 				[ 0, 1],
@@ -190,8 +190,8 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a particular orientation after two rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 2, 0],
 				[ 1, 0],
@@ -200,9 +200,9 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a particular orientation after three rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[ 0,-2],
 				[ 0,-1],
@@ -211,10 +211,10 @@ describe('Service: Piece', function () {
 			]);
 		});
 		it('has a same orientation after four rotations', function () {
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
-			Piece.rotate(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
+			Piece.justRotateCW(p);
 			expectPieceCoordsToBe(p,[
 				[-2, 0],
 				[-1, 0],
