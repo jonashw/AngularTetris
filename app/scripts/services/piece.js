@@ -140,7 +140,6 @@ angular.module('angularTetrisApp')
 	function randomColor(){
 		var index = Math.floor(Math.random() * colors.length);
 		var color = colors[index];
-		console.log('random color:',color);
 		return color;
 	}
 

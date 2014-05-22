@@ -5,6 +5,9 @@ angular.module('angularTetrisApp')
 	var _blockRows;
 	var _blockObservers = [];
 	var _rowObservers = [];
+	var _blockSize = 20;
+	var _blocksWide = 20.5;
+	var _blocksTall = 20.5;
 	function notifyOfRemovedBlock(block,doneFn){
 		_blockObservers.forEach(function(fn){
 			fn(block,doneFn);
@@ -16,7 +19,12 @@ angular.module('angularTetrisApp')
 		});
 	}
 	var _stage = {
-		element: null,
+		element: angular.element('<div></div>')
+			.addClass('stage')
+			.css({
+				'width':(_blockSize * _blocksWide) + 'px',
+				'height':(_blockSize * _blocksTall) + 'px'
+			}),
 		highestOccupiedRow: function(){
 			var nonEmptyRows = _blockRows.map(function(row,rowIndex){
 				return {
@@ -36,9 +44,9 @@ angular.module('angularTetrisApp')
 		onRowRemove: function(fn){
 			_rowObservers.push(fn);
 		},
-		blockSize: 20,
-		blocksWide: 20.5,
-		blocksTall: 20.5,
+		blockSize: _blockSize,
+		blocksWide: _blocksWide,
+		blocksTall: _blocksTall,
 		blocks: [],
 		absorbPiece: function(piece){
 			var self = this;
@@ -52,17 +60,11 @@ angular.module('angularTetrisApp')
 			clearRows();
 		}
 	};
-	_stage.element = angular.element('<div></div>')
-		.addClass('stage')
-		.css({
-			'width':(_stage.blockSize * _stage.blocksWide) + 'px',
-			'height':(_stage.blockSize * _stage.blocksTall) + 'px'
-		});
 	_blockRows = (function(){
 		var _rows = [];
 		for(var y=0; y < _stage.blocksTall; y++){
 			var row = [];
-			for(var x=0; x < _stage.blocksWide - 1; x++){
+			for(var x=0; x < _blocksWide - 1; x++){
 				row.push(null);
 			}
 			_rows.push(row);
@@ -123,7 +125,7 @@ angular.module('angularTetrisApp')
 	function moveRowsDown(removedRowIndex){ //move all existing blocks down, starting at the bottom
 		//start at the row right above the removed row, moving the slot contents down
 		for(var y = removedRowIndex - 1; y >= 0; y--){//yes, y is largest at the bottom
-			for(var x = 0; x < _stage.blocksWide - 1; x++){
+			for(var x = 0; x < _blocksWide - 1; x++){
 				var block = _blockRows[y][x];
 				if(block !== null){
 					block.y = y + 1;
